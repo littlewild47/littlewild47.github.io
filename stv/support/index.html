@@ -6,10 +6,14 @@
 
   Para cambiar un link o un monto se edita SOLO el bloque ENLACES de abajo: no hace falta
   rehornear la imagen. Un link en null sale como "Proximamente".
-  Textos en espanol e ingles NEUTROS (sin voseo ni tuteo; memoria textos-neutros-apps).
-  Sin rastreadores, sin cookies, sin recursos de terceros (las fuentes viajan al lado, OFL).
-  Ingles y tema oscuro por defecto (pedido del usuario 2026-10-01); ES y modo claro a eleccion,
-  recordados en localStorage del visitante.
+  Textos en ingles, espanol, ruso y chino simplificado, NEUTROS (sin voseo ni tuteo; memoria
+  textos-neutros-apps). Ruso y chino desde 2026-11-01 (tarea donaciones-rusia-china).
+  Sin rastreadores, sin cookies, sin recursos de terceros (las fuentes viajan al lado, OFL; Plex no
+  trae chino: el chino cae en la fuente del sistema).
+  Ingles y tema oscuro por defecto (pedido del usuario 2026-10-01); un navegador en ruso o chino abre
+  en su idioma. Idioma y modo claro a eleccion, recordados en localStorage del visitante.
+  Direcciones cripto: al cambiar una, correr tools/apoyar/gen-qr-cripto.py (valida la suma de control
+  y regenera qr/<id>.svg) antes de publicar.
 -->
 <html lang="en">
 <head>
@@ -43,25 +47,26 @@
 html { -webkit-text-size-adjust: 100%; }
 body {
   margin: 0; background: var(--fondo); color: var(--texto);
-  font: 400 16px/1.55 "Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  font: 400 16px/1.55 "Plex Sans", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", "Noto Sans SC", system-ui, -apple-system, "Segoe UI", sans-serif;
 }
 main { max-width: 640px; margin: 0 auto; padding: 28px 16px 48px; }
 
-/* Idioma: los dos textos viven en el HTML; se muestra el del atributo lang */
-html[lang="es"] [lang="en"], html[lang="en"] [lang="es"] { display: none; }
+/* Idioma: los cuatro textos viven en el HTML; se muestra el del atributo lang */
+html:not([lang="en"]) [lang="en"], html:not([lang="es"]) [lang="es"],
+html:not([lang="ru"]) [lang="ru"], html:not([lang="zh"]) [lang="zh"] { display: none; }
 
-.cabeza { display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; }
-.marca { font: 400 13px/1 "Plex Mono", ui-monospace, monospace; letter-spacing: .08em; color: var(--muted); }
+.cabeza { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 40px; }
+.marca { font: 400 13px/1 "Plex Mono", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", "Noto Sans SC", ui-monospace, monospace; letter-spacing: .08em; color: var(--muted); }
 .marca b { color: var(--acento); font-weight: 400; }
 .controles { display: flex; gap: 10px; align-items: center; }
-.idiomas { display: flex; gap: 2px; font: 400 13px/1 "Plex Mono", ui-monospace, monospace; }
+.idiomas { display: flex; gap: 2px; font: 400 13px/1 "Plex Mono", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", "Noto Sans SC", ui-monospace, monospace; }
 .idiomas button {
   font: inherit; color: var(--dim); background: none; border: 1px solid transparent;
   padding: 6px 9px; border-radius: 6px; cursor: pointer;
 }
 .idiomas button[aria-pressed="true"] { color: var(--texto); border-color: var(--linea2); }
 .tema {
-  font: 400 13px/1 "Plex Mono", ui-monospace, monospace; color: var(--dim); background: none;
+  font: 400 13px/1 "Plex Mono", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", "Noto Sans SC", ui-monospace, monospace; color: var(--dim); background: none;
   border: 1px solid var(--linea2); padding: 6px 9px; border-radius: 6px; cursor: pointer;
 }
 .tema:hover, .idiomas button:hover { color: var(--texto); }
@@ -73,7 +78,7 @@ h1 { font-weight: 500; font-size: 30px; line-height: 1.2; margin: 0 0 14px; lett
 
 section { margin-bottom: 36px; }
 h2 {
-  font: 400 12px/1 "Plex Mono", ui-monospace, monospace; letter-spacing: .1em; text-transform: uppercase;
+  font: 400 12px/1 "Plex Mono", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", "Noto Sans SC", ui-monospace, monospace; letter-spacing: .1em; text-transform: uppercase;
   color: var(--muted); margin: 0 0 6px;
 }
 .nota { color: var(--muted); font-size: 14px; margin: 0 0 14px; }
@@ -91,7 +96,7 @@ h2 {
 .fila { justify-content: space-between; gap: 16px; padding: 16px 18px; margin-bottom: 8px; }
 .fila .nombre { font-weight: 500; }
 .fila .desc { display: block; color: var(--muted); font-size: 14px; }
-.fila .flecha { color: var(--acento); font-family: "Plex Mono", ui-monospace, monospace; }
+.fila .flecha { color: var(--acento); font-family: "Plex Mono", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", "Noto Sans SC", ui-monospace, monospace; }
 a.boton:hover, a.fila:hover, a.boton:focus-visible, a.fila:focus-visible {
   border-color: var(--acento); background: var(--foco); outline: none;
 }
@@ -103,6 +108,30 @@ a.red:hover, a.red:focus-visible { color: var(--acento); outline: none; }
 .red.pronto { opacity: .4; }
 .pronto .flecha { color: var(--dim); }
 
+/* Cripto: direccion copiable + QR (negro sobre blanco con su margen: invertido no lo leen todos) */
+.cripto {
+  display: flex; gap: 18px; align-items: center; padding: 16px 18px; margin-bottom: 8px;
+  background: var(--superficie); border: 1px solid var(--linea2); border-radius: 10px;
+}
+.cripto .datos { flex: 1; min-width: 0; }
+.cripto .nombre { font-weight: 500; }
+.cripto .red { display: inline; color: var(--acento); font: 400 13px/1 "Plex Mono", ui-monospace, monospace; margin-left: 8px; }
+.cripto .desc { display: block; color: var(--muted); font-size: 14px; margin-bottom: 10px; }
+.cripto code {
+  display: block; font: 400 13px/1.45 "Plex Mono", ui-monospace, monospace; color: var(--texto2);
+  word-break: break-all; margin-bottom: 10px;
+}
+.copiar {
+  font: 400 13px/1 "Plex Mono", ui-monospace, monospace; color: var(--texto); background: none;
+  border: 1px solid var(--linea2); padding: 7px 11px; border-radius: 6px; cursor: pointer;
+}
+.copiar:hover, .copiar:focus-visible { border-color: var(--acento); outline: none; }
+.cripto img { width: 128px; height: 128px; flex: none; border-radius: 4px; background: #fff; }
+@media (max-width: 480px) {
+  .cripto { flex-direction: column; align-items: stretch; }
+  .cripto img { width: 160px; height: 160px; align-self: center; }
+}
+
 </style>
 </head>
 <body>
@@ -111,38 +140,55 @@ a.red:hover, a.red:focus-visible { color: var(--acento); outline: none; }
     <span class="marca"><b>STV</b> · TrimUI Smart Pro S</span>
     <div class="controles">
       <button type="button" class="tema" id="tema">
-        <span class="a-claro"><span lang="es">Claro</span><span lang="en">Light</span></span>
-        <span class="a-oscuro"><span lang="es">Oscuro</span><span lang="en">Dark</span></span>
+        <span class="a-claro"><span lang="es">Claro</span><span lang="en">Light</span><span lang="ru">Светлая</span><span lang="zh">浅色</span></span>
+        <span class="a-oscuro"><span lang="es">Oscuro</span><span lang="en">Dark</span><span lang="ru">Тёмная</span><span lang="zh">深色</span></span>
       </button>
       <div class="idiomas" role="group" aria-label="Idioma / Language">
         <button type="button" data-idioma="en" aria-pressed="true">EN</button>
         <button type="button" data-idioma="es" aria-pressed="false">ES</button>
+        <button type="button" data-idioma="ru" aria-pressed="false">RU</button>
+        <button type="button" data-idioma="zh" aria-pressed="false">中文</button>
       </div>
     </div>
   </div>
 
-  <h1><span lang="es">Apoyar el proyecto</span><span lang="en">Support the project</span></h1>
+  <h1><span lang="es">Apoyar el proyecto</span><span lang="en">Support the project</span><span lang="ru">Поддержать проект</span><span lang="zh">支持本项目</span></h1>
   <p class="intro">
     <span lang="es">STV es un firmware Android para la TrimUI Smart Pro S, desarrollado de forma independiente. Cada aporte permite dedicarle más tiempo: nuevas funciones, mejor rendimiento y correcciones.</span>
     <span lang="en">STV is a custom Android firmware for the TrimUI Smart Pro S, developed independently. Every contribution makes it possible to devote more time to it: new features, better performance and fixes.</span>
+    <span lang="ru">STV — независимая прошивка Android для TrimUI Smart Pro S. Каждый вклад позволяет уделять ей больше времени: новые функции, более высокая производительность и исправления.</span>
+    <span lang="zh">STV 是为 TrimUI Smart Pro S 独立开发的 Android 定制固件。每一份支持都能让我们投入更多时间：新功能、更好的性能和问题修复。</span>
   </p>
 
   <section aria-labelledby="t-mp">
-    <h2 id="t-mp"><span lang="es">Desde Argentina · Mercado Pago</span><span lang="en">From Argentina · Mercado Pago</span></h2>
+    <h2 id="t-mp"><span lang="es">Desde Argentina · Mercado Pago</span><span lang="en">From Argentina · Mercado Pago</span><span lang="ru">Из Аргентины · Mercado Pago</span><span lang="zh">来自阿根廷 · Mercado Pago</span></h2>
     <p class="nota">
       <span lang="es">Con dinero en cuenta, tarjeta de débito o de crédito.</span>
       <span lang="en">With account balance, debit or credit card.</span>
+      <span lang="ru">Со счёта, дебетовой или кредитной картой.</span>
+      <span lang="zh">使用账户余额、借记卡或信用卡。</span>
     </p>
     <div class="montos" id="montos"></div>
   </section>
 
   <section aria-labelledby="t-int">
-    <h2 id="t-int"><span lang="es">Desde cualquier país</span><span lang="en">From any country</span></h2>
+    <h2 id="t-int"><span lang="es">Desde cualquier país</span><span lang="en">From any country</span><span lang="ru">Из любой страны</span><span lang="zh">来自任何国家</span></h2>
     <div id="internacional"></div>
   </section>
 
+  <section aria-labelledby="t-cripto">
+    <h2 id="t-cripto"><span lang="es">Cripto</span><span lang="en">Crypto</span><span lang="ru">Криптовалюта</span><span lang="zh">加密货币</span></h2>
+    <p class="nota">
+      <span lang="es">Desde cualquier billetera o exchange, también desde Telegram (Wallet). Cada dirección acepta solo la red indicada: un envío por otra red se pierde.</span>
+      <span lang="en">From any wallet or exchange, including Telegram (Wallet). Each address accepts only the network shown: a transfer on any other network is lost.</span>
+      <span lang="ru">С любого кошелька или биржи, в том числе из Telegram (Wallet). Каждый адрес принимает только указанную сеть: перевод через другую сеть будет потерян.</span>
+      <span lang="zh">可从任何钱包或交易所转账，也可使用 Telegram (Wallet)。每个地址只接受所标注的网络：通过其他网络转账将会丢失。</span>
+    </p>
+    <div id="cripto"></div>
+  </section>
+
   <section aria-labelledby="t-enlaces">
-    <h2 id="t-enlaces"><span lang="es">Enlaces</span><span lang="en">Links</span></h2>
+    <h2 id="t-enlaces"><span lang="es">Enlaces</span><span lang="en">Links</span><span lang="ru">Ссылки</span><span lang="zh">链接</span></h2>
     <div class="redes" id="enlaces"></div>
   </section>
 </main>
@@ -160,10 +206,28 @@ const ENLACES = {
   internacional: [
     { nombre: "GitHub Sponsors", url: null,
       es: "Aporte mensual o único, sin comisión. Requiere una cuenta de GitHub.",
-      en: "Monthly or one-time, no fees. Requires a GitHub account." },
+      en: "Monthly or one-time, no fees. Requires a GitHub account.",
+      ru: "Ежемесячно или разово, без комиссии. Нужен аккаунт GitHub.",
+      zh: "按月或一次性，无手续费。需要 GitHub 账户。" },
     { nombre: "Ko-fi", url: "https://ko-fi.com/littlewild47",
-      es: "Con tarjeta o PayPal, sin necesidad de crear una cuenta.",
-      en: "With a card or PayPal, no account needed." }
+      es: "Con tarjeta (Visa, Mastercard, UnionPay) o PayPal, sin necesidad de crear una cuenta.",
+      en: "With a card (Visa, Mastercard, UnionPay) or PayPal, no account needed.",
+      ru: "Картой (Visa, Mastercard, UnionPay) или через PayPal, без регистрации.",
+      zh: "可使用银行卡（Visa、Mastercard、银联）或 PayPal，无需注册账户。" }
+  ],
+  // Direcciones de la billetera propia del usuario (Trust Wallet, 2026-11-01). id y direccion en la MISMA
+  // linea: de ahi las lee tools/apoyar/gen-qr-cripto.py, que valida la suma de control y escribe qr/<id>.svg.
+  cripto: [
+    { id: "usdt-trc20", nombre: "USDT", red: "TRON · TRC-20", direccion: "THoXBqZkZ7dh3dk5FBSqD5w5CPp5LVNRGk",
+      es: "Solo USDT por la red TRON (TRC-20).",
+      en: "USDT on the TRON network (TRC-20) only.",
+      ru: "Только USDT в сети TRON (TRC-20).",
+      zh: "仅限 TRON 网络（TRC-20）上的 USDT。" },
+    { id: "ton", nombre: "Toncoin", red: "TON", direccion: "UQCZPNJZxsgKHdem08k58_W4kXLDKIlYRQRoSvtoKpAX21ba",
+      es: "Solo Toncoin (TON) por la red TON. No hace falta memo.",
+      en: "Toncoin (TON) on the TON network only. No memo needed.",
+      ru: "Только Toncoin (TON) в сети TON. Комментарий (memo) не нужен.",
+      zh: "仅限 TON 网络上的 Toncoin (TON)。无需备注（memo）。" }
   ],
   // El repo publico del proyecto todavia no existe (arco subida-github).
   // Solo iconos; sin URL el icono sale apagado y sin enlace.
@@ -173,12 +237,14 @@ const ENLACES = {
   ]
 };
 
-const PRONTO = { es: "Próximamente", en: "Coming soon" };
+const IDIOMAS = ["en", "es", "ru", "zh"];
+const PRONTO = { es: "Próximamente", en: "Coming soon", ru: "Скоро", zh: "即将推出" };
 
-function texto(es, en) {
+// t = { es, en, ru, zh }: un span por idioma, el CSS muestra el del atributo lang de <html>
+function texto(t) {
   const f = document.createDocumentFragment();
-  for (const [l, t] of [["es", es], ["en", en]]) {
-    const s = document.createElement("span"); s.lang = l; s.textContent = t; f.appendChild(s);
+  for (const l of IDIOMAS) {
+    const s = document.createElement("span"); s.lang = l; s.textContent = t[l]; f.appendChild(s);
   }
   return f;
 }
@@ -195,11 +261,11 @@ const montos = document.getElementById("montos");
 for (const m of ENLACES.mercadoPago) {
   const b = enlace("boton", m.url);
   const linea = document.createElement("span");
-  if (m.libre) linea.appendChild(texto("Otro monto", "Other amount"));
+  if (m.libre) linea.appendChild(texto({ es: "Otro monto", en: "Other amount", ru: "Другая сумма", zh: "其他金额" }));
   else linea.textContent = m.monto;
   b.appendChild(linea);
   if (!m.url) {
-    const s = document.createElement("small"); s.appendChild(texto(PRONTO.es, PRONTO.en));
+    const s = document.createElement("small"); s.appendChild(texto(PRONTO));
     linea.appendChild(s);
   }
   montos.appendChild(b);
@@ -211,7 +277,7 @@ function filas(destino, lista) {
     const izq = document.createElement("span");
     const n = document.createElement("span"); n.className = "nombre"; n.textContent = p.nombre;
     const d = document.createElement("span"); d.className = "desc";
-    d.appendChild(p.url ? texto(p.es, p.en) : texto(PRONTO.es, PRONTO.en));
+    d.appendChild(texto(p.url ? p : PRONTO));
     izq.append(n, d);
     const fl = document.createElement("span"); fl.className = "flecha"; fl.textContent = "→";
     f.append(izq, fl);
@@ -219,6 +285,32 @@ function filas(destino, lista) {
   }
 }
 filas(document.getElementById("internacional"), ENLACES.internacional);
+
+const COPIAR = { es: "Copiar", en: "Copy", ru: "Копировать", zh: "复制" };
+const COPIADA = { es: "Copiada", en: "Copied", ru: "Скопировано", zh: "已复制" };
+const cripto = document.getElementById("cripto");
+for (const c of ENLACES.cripto) {
+  const caja = document.createElement("div"); caja.className = "cripto";
+  const datos = document.createElement("div"); datos.className = "datos";
+  const n = document.createElement("span"); n.className = "nombre"; n.textContent = c.nombre;
+  const r = document.createElement("span"); r.className = "red"; r.textContent = c.red;
+  const d = document.createElement("span"); d.className = "desc"; d.appendChild(texto(c));
+  const dir = document.createElement("code"); dir.textContent = c.direccion;
+  const b = document.createElement("button"); b.type = "button"; b.className = "copiar";
+  b.appendChild(texto(COPIAR));
+  b.addEventListener("click", async () => {
+    // Sin portapapeles (permiso negado, http): queda la direccion seleccionada para copiarla a mano
+    try { await navigator.clipboard.writeText(c.direccion); }
+    catch (e) { getSelection().selectAllChildren(dir); return; }
+    b.replaceChildren(texto(COPIADA));
+    setTimeout(() => b.replaceChildren(texto(COPIAR)), 2000);
+  });
+  datos.append(n, r, d, dir, b);
+  const qr = document.createElement("img");
+  qr.src = "qr/" + c.id + ".svg"; qr.alt = "QR " + c.nombre + " · " + c.red;
+  caja.append(datos, qr);
+  cripto.appendChild(caja);
+}
 
 // Iconos de "Enlaces": trazos simples en currentColor (GitHub = octicon mark-github, MIT).
 const ICONOS = {
@@ -231,13 +323,15 @@ for (const r of ENLACES.enlaces) {
   el.className = "red" + (r.url ? "" : " pronto");
   el.innerHTML = ICONOS[r.icono];
   el.setAttribute("aria-label", r.nombre);
-  el.title = r.url ? r.nombre : r.nombre + " · " + PRONTO.en + " / " + PRONTO.es;
+  el.title = r.url ? r.nombre : r.nombre + " · " + PRONTO.en;
   if (r.url) { el.href = r.url; el.rel = "noopener noreferrer"; }
   redes.appendChild(el);
 }
 
-// ===== idioma: ingles por defecto (pedido del usuario 2026-10-01); el elegido a mano se recuerda =====
-const TITULOS = { es: "Apoyar el proyecto · STV", en: "Support the project · STV" };
+// ===== idioma: ingles por defecto (pedido del usuario 2026-10-01), salvo un navegador en ruso o chino
+// (2026-11-01); el elegido a mano se recuerda =====
+const TITULOS = { es: "Apoyar el proyecto · STV", en: "Support the project · STV",
+                  ru: "Поддержать проект · STV", zh: "支持本项目 · STV" };
 function poner(l) {
   document.documentElement.lang = l;
   document.title = TITULOS[l];
@@ -246,7 +340,11 @@ function poner(l) {
 }
 let elegido = null;
 try { elegido = localStorage.getItem("stv-idioma"); } catch (e) {}
-poner(elegido === "es" ? "es" : "en");
+if (!IDIOMAS.includes(elegido)) {
+  const nav = (navigator.languages || [navigator.language || ""]).map(x => String(x).slice(0, 2).toLowerCase());
+  elegido = nav.find(x => x === "ru" || x === "zh") || "en";
+}
+poner(elegido);
 for (const b of document.querySelectorAll("[data-idioma]")) {
   b.addEventListener("click", () => {
     poner(b.dataset.idioma);
